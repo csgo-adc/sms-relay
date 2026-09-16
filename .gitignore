@@ -4,5 +4,6 @@ build/
 app/build/
 work/
 release-signing/
+keystore.properties
 local.properties
 *.iml

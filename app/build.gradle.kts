@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -23,6 +24,20 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    val signingPropertiesFile = rootProject.file("keystore.properties")
+    if (signingPropertiesFile.exists()) {
+        val signingProperties = Properties().apply { signingPropertiesFile.inputStream().use(::load) }
+        signingConfigs {
+            create("release") {
+                storeFile = rootProject.file(signingProperties.getProperty("storeFile"))
+                storePassword = signingProperties.getProperty("storePassword")
+                keyAlias = signingProperties.getProperty("keyAlias")
+                keyPassword = signingProperties.getProperty("keyPassword")
+            }
+        }
+        buildTypes.named("release") { signingConfig = signingConfigs.getByName("release") }
     }
 }
 
