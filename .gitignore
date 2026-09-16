@@ -3,5 +3,6 @@
 build/
 app/build/
 work/
+release-signing/
 local.properties
 *.iml
