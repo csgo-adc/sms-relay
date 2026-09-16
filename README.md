@@ -23,6 +23,23 @@ Open this folder in Android Studio (JDK 17), wait for Gradle sync, then use **Ru
 
 Never share a bot token in a chat, screenshot, or public repository. Telegram's [official bot tutorial](https://core.telegram.org/bots/tutorial) documents the BotFather flow and Bot API.
 
+### Send relayed SMS to a group or channel
+
+Use the same bot token and get the destination's chat ID from `getUpdates`:
+
+1. **Group:** create or open a Telegram group, add the bot as a member, then send a normal message or a command such as `/start` in the group.
+2. **Channel:** create or open a channel, add the bot as an administrator, allow it to post messages, then publish a test post in the channel. A bot needs administrator access to receive channel-post updates.
+3. Open `https://api.telegram.org/botYOUR_TOKEN/getUpdates` in a browser. Locate the update containing either `"chat": {"id": ...}` (group) or `"channel_post": {"chat": {"id": ...}}` (channel).
+4. Copy that `id` number into **Chat ID** in SMS Relay and save. Group and channel IDs are commonly negative numbers; channel IDs often begin with `-100`. Keep the minus sign.
+
+You can use your private chat, a group, or a channel as the destination. The bot must already have access to the destination chat before forwarding is enabled.
+
+## Background operation and Xiaomi settings
+
+When forwarding is enabled, SMS Relay shows a persistent Android notification and starts a visible foreground relay service. Incoming SMS are also handled by Android's SMS receiver, so closing the app window does not disable forwarding. The service resumes after a normal device restart while forwarding remains enabled.
+
+Android prevents any app from restarting after a **Force stop**, and battery restriction modes can prevent background work. On a Xiaomi phone, open **Settings → Apps → Manage apps → SMS Relay → Battery saver** and select **No restrictions**. If your MIUI version offers **Autostart**, turn it on for SMS Relay. The persistent “SMS Relay is enabled” notification is the confirmation that the service is active.
+
 For another service, use an HTTPS endpoint. The app POSTs JSON containing `sender`, `body`, and Unix-milliseconds `receivedAt`; it can include an optional Bearer token.
 
 Keep the backup phone locked and secured. Anyone with its unlock access can change the forwarding destination.

@@ -8,18 +8,28 @@ import androidx.core.app.NotificationManagerCompat
 
 object RelayNotification {
     private const val channelId = "relay_status"
-    private const val notificationId = 42
+    const val notificationId = 42
 
-    fun update(context: Context, enabled: Boolean) {
+    fun create(context: Context) {
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(NotificationChannel(channelId, "SMS relay status", NotificationManager.IMPORTANCE_LOW))
-        if (!enabled) { manager.cancel(notificationId); return }
-        val notification = NotificationCompat.Builder(context, channelId)
+    }
+
+    fun build(context: Context): android.app.Notification {
+        create(context)
+        return NotificationCompat.Builder(context, channelId)
             .setSmallIcon(android.R.drawable.stat_notify_sync)
             .setContentTitle("SMS Relay is enabled")
             .setContentText("New SMS on this phone may be forwarded to your configured destination.")
             .setOngoing(true)
             .build()
-        NotificationManagerCompat.from(context).notify(notificationId, notification)
     }
+
+    fun update(context: Context, enabled: Boolean) {
+        val manager = context.getSystemService(NotificationManager::class.java)
+        create(context)
+        if (!enabled) { manager.cancel(notificationId); return }
+        NotificationManagerCompat.from(context).notify(notificationId, build(context))
+    }
+
 }

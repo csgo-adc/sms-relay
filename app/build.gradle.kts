@@ -13,7 +13,9 @@ android {
     defaultConfig {
         applicationId = "com.example.smsrelay"
         minSdk = 26
-        targetSdk = 35
+        // API 34 permits the visible relay service to resume after boot on Android 14.
+        // Newer Android versions still receive SMS through the system broadcast receiver.
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
     }

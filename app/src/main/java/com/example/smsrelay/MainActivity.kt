@@ -23,7 +23,11 @@ class MainActivity : ComponentActivity() {
         requestNeededPermissions()
         val store = SettingsStore(this)
         RelayNotification.update(this, store.read().enabled)
-        setContent { RelayScreen(store) { RelayNotification.update(this, it) } }
+        RelayService.sync(this, store.read().enabled)
+        setContent { RelayScreen(store) {
+            RelayNotification.update(this, it)
+            RelayService.sync(this, it)
+        } }
     }
 
     private fun requestNeededPermissions() {
