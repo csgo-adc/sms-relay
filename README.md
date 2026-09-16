@@ -1,6 +1,6 @@
 # SMS Relay for Android
 
-A transparent Android app for relaying **new incoming SMS on your own phone** to either a Telegram bot or an HTTPS webhook. It never deletes, blocks, or conceals SMS, and forwarding is off until you explicitly enable it.
+SMS Relay forwards new incoming messages from your Android phone to your Telegram bot, group, channel, or HTTPS webhook. It keeps your messages in the normal inbox, shows a visible status notification while enabled, and only forwards after you turn it on.
 
 ## Build and install
 
@@ -34,11 +34,11 @@ Use the same bot token and get the destination's chat ID from `getUpdates`:
 
 You can use your private chat, a group, or a channel as the destination. The bot must already have access to the destination chat before forwarding is enabled.
 
-## Background operation and Xiaomi settings
+## Background operation
 
 When forwarding is enabled, SMS Relay shows a persistent Android notification and starts a visible foreground relay service. Incoming SMS are also handled by Android's SMS receiver, so closing the app window does not disable forwarding. The service resumes after a normal device restart while forwarding remains enabled.
 
-Android prevents any app from restarting after a **Force stop**, and battery restriction modes can prevent background work. On a Xiaomi phone, open **Settings → Apps → Manage apps → SMS Relay → Battery saver** and select **No restrictions**. If your MIUI version offers **Autostart**, turn it on for SMS Relay. The persistent “SMS Relay is enabled” notification is the confirmation that the service is active.
+Android prevents any app from restarting after a **Force stop**, and battery restriction modes can prevent background work. In your phone's app battery settings, choose **Unrestricted** or **No restrictions** for SMS Relay if that option is available. The persistent “SMS Relay is enabled” notification confirms that the service is active.
 
 For another service, use an HTTPS endpoint. The app POSTs JSON containing `sender`, `body`, and Unix-milliseconds `receivedAt`; it can include an optional Bearer token.
 
